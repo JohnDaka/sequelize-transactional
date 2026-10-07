@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2022"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    // Specs run as TypeScript straight in Node, which needs a relative import to name its file:
+    // `./transactional.ts`. The build turns that into `./transactional.js`.
+    "rewriteRelativeImportExtensions": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "types": ["node"]
+  },
+  // Everything, specs too: what `typecheck`, the editor and the linter see.
+  "include": ["src/**/*.ts"]
+}

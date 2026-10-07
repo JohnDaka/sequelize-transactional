@@ -1,0 +1,5 @@
+{
+  // What is published: the sources, without their specs and the fakes the specs share.
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "dist", "src/**/*.spec.ts", "src/testing/**"]
+}

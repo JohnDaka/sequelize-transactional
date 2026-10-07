@@ -1,0 +1,71 @@
+{
+  "name": "@dakaio/sequelize-transactional",
+  "version": "0.1.0",
+  "description": "@Transactional() for Sequelize without injecting a connection: nested calls join one transaction, currentTransaction() reaches it anywhere, and the database's clock is one now() for every server.",
+  "license": "MIT",
+  "author": "dakaio.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnDaka/sequelize-transactional.git"
+  },
+  "homepage": "https://github.com/JohnDaka/sequelize-transactional#readme",
+  "bugs": "https://github.com/JohnDaka/sequelize-transactional/issues",
+  "keywords": [
+    "sequelize",
+    "sequelize-typescript",
+    "transaction",
+    "transactional",
+    "decorator",
+    "nestjs",
+    "asynclocalstorage",
+    "postgres"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "format": "eslint . --fix",
+    "test": "node --test \"src/**/*.spec.ts\"",
+    "test:coverage": "node --experimental-test-coverage --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 --test-coverage-exclude=\"src/**/*.spec.ts\" --test-coverage-exclude=\"src/testing/**\" --test \"src/**/*.spec.ts\"",
+    "clean": "rm -rf dist",
+    "prepack": "npm run clean && npm run build",
+    "release": "node scripts/release.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^17.0.0",
+    "pg": "^8.23.1",
+    "prettier": "^3.6.0",
+    "sequelize": "^6.37.8",
+    "sequelize-typescript": "^2.1.6",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.71.0"
+  },
+  "packageManager": "pnpm@11.20.0"
+}

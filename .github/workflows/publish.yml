@@ -1,0 +1,48 @@
+name: publish
+
+# A `v<version>` tag, pushed by `pnpm release` from main.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # A real Postgres for src/postgres.spec.ts: commit, rollback, nesting and now() as they run.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    permissions:
+      contents: read
+      # npm trusted publishing: npm takes this workflow's identity instead of a stored token, and
+      # the package page shows which commit and workflow built it (provenance).
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - name: The tag is the package's version
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test "v${version}" = "${GITHUB_REF_NAME}" || { echo "Tag ${GITHUB_REF_NAME} is not v${version}"; exit 1; }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test:coverage
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install --global npm@latest
+      - run: npm publish
