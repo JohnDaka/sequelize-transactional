@@ -365,8 +365,12 @@ describe('against Postgres', { skip: SKIP }, () => {
       await Order.update({ placedAt: databaseNow(sequelize) }, { where: { item: 'tea' } });
       const now = await readDatabaseNow({ connection: sequelize });
 
-      const order = await Order.findOne({ where: { placedAt: { [Op.lte]: now } } });
-      assert.equal(order?.get('item'), 'tea');
+      // Both read into JS, both cut to the millisecond: Postgres keeps microseconds, so comparing
+      // the column with `now` in SQL could miss a row written in the same millisecond.
+      const order = await Order.findOne({ where: { item: 'tea' } });
+      const placedAt = order?.get('placedAt') as Date;
+      assert.ok(placedAt instanceof Date);
+      assert.ok(placedAt.getTime() <= now.getTime());
     });
 
     it("reads on a transaction's own connection when none is registered", async () => {

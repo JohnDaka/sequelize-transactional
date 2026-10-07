@@ -516,6 +516,10 @@ Compare the `code`, never the message: the message is written for a person, and 
 
 ## Caveats
 
+### `readDatabaseNow()` is cut to the millisecond
+
+Postgres keeps time to the microsecond, a JS `Date` to the millisecond. A row written with `databaseNow()` in the same millisecond as a later `readDatabaseNow()` holds a time a few microseconds after the value read back, so `WHERE placed_at <= :now` with that value misses it. Compare inside SQL with `databaseNow()` itself, or compare the two values in JS, where both are cut the same way.
+
 ### The transaction is appended, not put in its place
 
 The decorator appends the transaction right after the arguments the caller passed, wherever that falls. A method with optional parameters before the transaction gets it in the wrong one when the caller leaves them out:
