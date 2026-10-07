@@ -45,4 +45,14 @@ jobs:
       - run: pnpm test:coverage
       # Trusted publishing needs npm 11.5.1 or later.
       - run: npm install --global npm@latest
-      - run: npm publish
+      # A version already on npm (published by hand, or a re-run) is not an error: npm refuses to
+      # publish over it, so the run says so and stops here instead of failing.
+      - name: Publish, unless this version is on npm already
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          if npm view "${name}@${version}" version > /dev/null 2>&1; then
+            echo "::notice::${name}@${version} is on npm already: nothing to publish."
+          else
+            npm publish
+          fi
