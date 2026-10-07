@@ -34,7 +34,8 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-          registry-url: https://registry.npmjs.org
+          # No registry-url: it writes an .npmrc with a placeholder token, which npm then sends
+          # instead of the workflow's identity. npm's own registry is the default anyway.
       - name: The tag is the package's version
         run: |
           version="$(node -p "require('./package.json').version")"
