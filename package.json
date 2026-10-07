@@ -1,6 +1,6 @@
 {
   "name": "@dakaio/sequelize-transactional",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "@Transactional() for Sequelize without injecting a connection: nested calls join one transaction, currentTransaction() reaches it anywhere, and the database's clock is one now() for every server.",
   "license": "MIT",
   "author": "dakaio.com",
